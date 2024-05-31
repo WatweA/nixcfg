@@ -38,7 +38,7 @@ in
   boot.loader.grub.enableCryptodisk = true;
 
   boot.initrd.luks.devices."luks-f85b4298-560d-424c-a0b0-e7f4a898c967".keyFile = "/crypto_keyfile.bin";
-  networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "awatwe-nixpad"; # Define your hostname.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
 
   # Configure network proxy if necessary
@@ -99,8 +99,9 @@ in
     #media-session.enable = true;
   };
 
-  # Enable touchpad support (enabled default in most desktopManager).
-  services.xserver = {
+  /*
+    # Enable touchpad support (enabled default in most desktopManager).
+    services.xserver = {
     # synaptics.enable = false;
     libinput = {
       enable = true;
@@ -109,18 +110,20 @@ in
         tapping = true;
       };
     };
-  };
+    };
+  */
+
   /*
-  # Avoid touchpad click to tap (clickpad) bug. For more detail see:
-  # https://wiki.archlinux.org/title/Touchpad_Synaptics#Touchpad_does_not_work_after_resuming_from_hibernate/suspend
-  boot.kernelParams = [
+    # Avoid touchpad click to tap (clickpad) bug. For more detail see:
+    # https://wiki.archlinux.org/title/Touchpad_Synaptics#Touchpad_does_not_work_after_resuming_from_hibernate/suspend
+    boot.kernelParams = [
     "psmouse.synaptics_intertouch=0"
     "i8042.nomux=1"
     "i8042.nopnp=1"
     "i8042.reset"
-  ];
-  boot.blacklistedKernelModules = [ "psmouse" "i2c_hid" "i2c_hid_acpi" ];
-  boot.kernelModules = [ "synaptics_i2c" "synaptics_usb" ];
+    ];
+    boot.blacklistedKernelModules = [ "psmouse" "i2c_hid" "i2c_hid_acpi" ];
+    boot.kernelModules = [ "synaptics_i2c" "synaptics_usb" ];
   */
 
   # Define a user account. Don't forget to set a password with ‘passwd’.
@@ -146,7 +149,8 @@ in
       vscodium
       git
       neofetch
-      nixpkgs-fmt
+      nil # nix language server
+      nixpkgs-fmt # nix formatter of choice
       picocom
       # slack # There is an issue with slack via home-manager rn
       zoom-us
@@ -302,31 +306,39 @@ in
     "zoom"
   ];
 
+  # Enable the Flakes feature and the accompanying new nix command-line tool
+  nix.settings.experimental-features = [ "nix-command" "flakes" ];
   # List packages installed in system profile. To search, run:
-  # $ nix search wget
   environment.systemPackages = with pkgs; [
     coreutils
+    curl
+    direnv
     (pkgs.discord.override {
       withOpenASAR = true;
       withTTS = true;
     })
+    # Flakes uses git as the dependency manager
+    git
     gnupg
     openssl
     openssh
     pciutils
     slack
     usbutils
-    vim # Do not forget to add an editor to edit configuration.nix! The Nano editor is also installed by default.
+    vim
     vscodium
     wget
   ];
+  # Use vim as the default editor
+  environment.variables.EDITOR = "vim";
 
-  # Power management settings
-  powerManagement.enable = true;
-  services.tlp.enable = false;
-  services.throttled.enable = lib.mkDefault true;
-  services.auto-cpufreq.enable = true;
-  services.auto-cpufreq.settings = {
+  /*
+    # Power management settings
+    powerManagement.enable = true;
+    services.tlp.enable = false;
+    services.throttled.enable = true;
+    services.auto-cpufreq.enable = true;
+    services.auto-cpufreq.settings = {
     battery = {
       governor = "powersave";
       turbo = "never";
@@ -335,13 +347,8 @@ in
       governor = "performance";
       turbo = "auto";
     };
-  };
-
-  # HID settings for touchpad and trackpoint
-  hardware.trackpoint = {
-    enable = true;
-    emulateWheel = true;
-  };
+    };
+  */
 
   # enable NVIDIA
   hardware.nvidia = {
@@ -402,10 +409,10 @@ in
   networking.wireless.environmentFile = "/run/secrets/wireless.env";
   # content of /run/secrets/wireless.env:
   /*
-  NET_HOME_ID=HomeNetwork
-  NET_HOME_PSK=HomePassword
-  NET_WORK_ID=WorkNetwork
-  NET_WORK_PSK=WorkPassword
+    NET_HOME_ID=HomeNetwork
+    NET_HOME_PSK=HomePassword
+    NET_WORK_ID=WorkNetwork
+    NET_WORK_PSK=WorkPassword
   */
   # wireless-related configuration
   networking.wireless.networks = {
@@ -426,5 +433,5 @@ in
   # Before changing this value read the documentation for this option
   # (e.g. man configuration.nix or on https://nixos.org/nixos/options.html).
   system.stateVersion = "23.11"; # Did you read the comment?
-  nix.settings.experimental-features = [ "nix-command" "flakes" ];
 }
+
