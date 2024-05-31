@@ -267,6 +267,8 @@ in
           # Check about:config for options.
           Preferences = {
             "browser.contentblocking.category" = { Value = "strict"; Status = "locked"; };
+            "extensions.formautofill.addresses.enabled" = lock-false;
+            "extensions.formautofill.creditCards.enabled" = lock-false;
             "extensions.pocket.enabled" = lock-false;
             "extensions.screenshots.disabled" = lock-true;
             "browser.topsites.contile.enabled" = lock-false;
@@ -275,6 +277,7 @@ in
             "browser.search.suggest.enabled.private" = lock-false;
             "browser.urlbar.suggest.searches" = lock-false;
             "browser.urlbar.showSearchSuggestionsFirst" = lock-false;
+            "browser.newtabpage.activity-stream.feeds.recommendationprovider" = lock-false;
             "browser.newtabpage.activity-stream.feeds.section.topstories" = lock-false;
             "browser.newtabpage.activity-stream.feeds.snippets" = lock-false;
             "browser.newtabpage.activity-stream.section.highlights.includePocket" = lock-false;
@@ -284,6 +287,9 @@ in
             "browser.newtabpage.activity-stream.showSponsored" = lock-false;
             "browser.newtabpage.activity-stream.system.showSponsored" = lock-false;
             "browser.newtabpage.activity-stream.showSponsoredTopSites" = lock-false;
+            "privacy.cpd.passwords" = lock-false;
+            "privacy.donottrackheader.enabled" = lock-true;
+            "privacy.globalprivacycontrol.enabled" = lock-true;
           };
         };
       };
